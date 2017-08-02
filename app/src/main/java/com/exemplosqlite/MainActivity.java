@@ -8,6 +8,8 @@ import android.util.Log;
 
 public class MainActivity extends AppCompatActivity {
 
+    private Cursor cursor;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -17,14 +19,25 @@ public class MainActivity extends AppCompatActivity {
             SQLiteDatabase bancoDaddos = openOrCreateDatabase("app", MODE_PRIVATE, null);
 
             //cria uma tabela no banco caso ela não exista
-            bancoDaddos.execSQL("CREATE TABLE IF NOT EXISTS pessoas(nome VARCHAR,idade INT(3), sexo VARCHAR(1))");
+            bancoDaddos.execSQL("CREATE TABLE IF NOT EXISTS pessoas(id INTEGER PRIMARY KEY AUTOINCREMENT , nome VARCHAR,idade INT(3), sexo VARCHAR(1))");
+
+            //Apagar tabela
+            //bancoDaddos.execSQL("DROP TABLE pessoas");
 
             //inserir dados na tabela
-              bancoDaddos.execSQL("INSERT INTO pessoas(nome,idade,sexo) values ('Flávio Roberto',21,'M')");
-              bancoDaddos.execSQL("INSERT INTO pessoas(nome,idade,sexo) values ('Gabriela Bueno',20,'F')");
+             bancoDaddos.execSQL("INSERT INTO pessoas(nome,idade,sexo) values ('Flávio Roberto',21,'M')");
+            //bancoDaddos.execSQL("INSERT INTO pessoas(id,nome,idade,sexo) values (2,'Gabriela Bueno',20,'F')");
+
+            //atualizar dados do banco
+            // bancoDaddos.execSQL("UPDATE pessoas as p SET sexo = 'M', nome = 'João', idade = 19 WHERE p.nome = 'Flávio Roberto' ",null);
+
+            //apagar dados do banco
+           // bancoDaddos.execSQL("DELETE FROM pessoas where nome = 'Flávio Roberto'");
 
             //recuperar dados do banco
-            Cursor cursor = bancoDaddos.rawQuery("SELECT nome,idade,sexo FROM pessoas", null); //cursor é necessário pra percorrer a tabela e o raw Query monta um cursor baseado no banco
+             Cursor cursor = bancoDaddos.rawQuery("SELECT nome,idade,sexo FROM pessoas", null); //cursor é necessário pra percorrer a tabela e o raw Query monta um cursor baseado no banco
+            //Cursor cursor = bancoDaddos.rawQuery("SELECT nome,idade,sexo FROM pessoas WHERE nome LIKE 'F%' ",null);
+            // cursor = bancoDaddos.rawQuery("SELECT nome,idade,sexo FROM pessoas WHERE idade > 20 ",null);
 
             //recuperar indices das colunas
             int indiceNome = cursor.getColumnIndex("nome");
